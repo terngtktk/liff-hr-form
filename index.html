@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบฟอร์มขออัตรากำลังบุคลากร (HR Recruitment)</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f4f7f6; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h2 { color: #0F3660; text-align: center; font-size: 20px; }
+        label { font-weight: bold; font-size: 14px; color: #333; margin-top: 10px; display: block; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #0F3660; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        button:hover { background-color: #0b2847; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>ฟอร์มแจ้งความต้องการบุคลากร</h2>
+    <form id="recruitmentForm">
+        <label>1. ชื่อตำแหน่ง และ ระดับ (Job Title & Level)</label>
+        <input type="text" id="job_title_and_level" placeholder="เช่น Senior Data Analyst" required>
+
+        <label>2. รายละเอียดงานหลัก (Key Responsibilities)</label>
+        <textarea id="key_responsibilities" rows="3" placeholder="ระบุขอบเขตงานที่ต้องรับผิดชอบ" required></textarea>
+
+        <label>3. ทักษะที่จำเป็น (Required Skills)</label>
+        <textarea id="required_skills" rows="2" placeholder="เช่น Python, SQL, การสื่อสาร" required></textarea>
+
+        <label>4. ประสบการณ์ & ช่วงอายุ (Experience & Age Range)</label>
+        <input type="text" id="experience_and_age" placeholder="เช่น ประสบการณ์ 3 ปีขึ้นไป, อายุ 25-35 ปี" required>
+
+        <label>5. วันที่คาดหวังให้เริ่มงาน (Expected Join Date)</label>
+        <input type="text" id="expected_join_date" placeholder="เช่น ด่วนที่สุด หรือ ภายในเดือนหน้า" required>
+
+        <label>6. ประเภทการจ้างงาน (Employment Type)</label>
+        <select id="employment_type">
+            <option value="พนักงานประจำ (Full-time)">พนักงานประจำ (Full-time)</option>
+            <option value="พนักงานสัญญาจ้าง (Contract)">พนักงานสัญญาจ้าง (Contract)</option>
+            <option value="นักศึกษาฝึกงาน (Intern)">นักศึกษาฝึกงาน (Intern)</option>
+        </select>
+
+        <label>7. ทักษะที่ต้องมี vs พิจารณาพิเศษ (Must-Have vs Nice-to-Have)</label>
+        <textarea id="must_have_nice_to_have_skills" rows="2" placeholder="ระบุสิ่งที่ขาดไม่ได้ และสิ่งที่เป็นโบนัส" required></textarea>
+
+        <label>8. รูปแบบการทำงาน & สถานที่ (Work Arrangement & Location)</label>
+        <input type="text" id="work_arrangement_location" placeholder="เช่น เข้าออฟฟิศ 100% ที่ สนญ. นนทบุรี" required>
+
+        <label>9. ช่วงเงินเดือน (Budget / Salary Range)</label>
+        <input type="text" id="salary_range" placeholder="ระบุช่วงงบประมาณที่อนุมัติ" required>
+
+        <label>10. แผนก / บริษัทในเครือ (Department / Cost Center)</label>
+        <input type="text" id="department" placeholder="เช่น แผนก HRIS / บริษัท JAS" required>
+
+        <button type="button" onclick="submitForm()">ส่งข้อมูลให้ HR</button>
+    </form>
+</div>
+
+<script>
+    // === จุดที่ต้องนำ URL มาใส่ ===
+    const myLiffId = "ใส่_LIFF_ID_ที่นี่"; 
+    const n8nWebhookUrl = "ใส่_URL_ของ_Webhook_n8n_ที่นี่"; 
+
+    liff.init({ liffId: myLiffId }).then(() => {
+        if (!liff.isLoggedIn()) { liff.login(); }
+    }).catch(err => console.error("LIFF Init Error", err));
+
+    async function submitForm() {
+        try {
+            const profile = await liff.getProfile();
+            const formData = {
+                line_user_id: profile.userId,
+                job_title_and_level: document.getElementById("job_title_and_level").value,
+                key_responsibilities: document.getElementById("key_responsibilities").value,
+                required_skills: document.getElementById("required_skills").value,
+                experience_and_age: document.getElementById("experience_and_age").value,
+                expected_join_date: document.getElementById("expected_join_date").value,
+                employment_type: document.getElementById("employment_type").value,
+                must_have_nice_to_have_skills: document.getElementById("must_have_nice_to_have_skills").value,
+                work_arrangement_location: document.getElementById("work_arrangement_location").value,
+                salary_range: document.getElementById("salary_range").value,
+                department: document.getElementById("department").value
+            };
+
+            const response = await fetch(n8nWebhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                alert("ส่งข้อมูลเรียบร้อย ระบบ AI กำลังตรวจสอบให้ค่ะ!");
+                liff.closeWindow();
+            } else {
+                alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
+            }
+        } catch (error) {
+            console.error("Error", error);
+            alert("ไม่สามารถดำเนินการได้ กรุณาลองใหม่อีกครั้ง");
+        }
+    }
+</script>
+</body>
+</html>
