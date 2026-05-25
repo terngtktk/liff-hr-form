@@ -9,103 +9,136 @@
     <style>
         :root {
             --primary-color: #ee5803;
-            --primary-hover: #d14a02;
-            --bg-color: #f4f7f9;
-            --text-main: #2c3e50;
-            --text-light: #546e7a;
-            --border-color: #cfd8dc;
+            --primary-hover: #cf4d02;
+            --bg-color: #ffffff; /* Clean White Background */
+            --text-main: #1a1a1a;
+            --text-sub: #546e7a;
+            --border-color: #e0e0e0;
         }
 
         body { 
             font-family: 'Prompt', sans-serif; 
-            padding: 20px 15px; 
+            padding: 0; 
+            margin: 0;
             background-color: var(--bg-color); 
             color: var(--text-main);
-            margin: 0;
+            display: flex;
+            justify-content: center;
         }
 
         .container { 
-            background: #ffffff; 
-            padding: 30px 25px; 
-            border-radius: 16px; 
-            max-width: 500px; 
-            margin: auto; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.06); 
+            background: #fff; 
+            padding: 40px 20px; 
+            width: 100%;
+            max-width: 480px; 
+            box-sizing: border-box;
         }
 
         h2 { 
             color: var(--primary-color); 
             text-align: center; 
-            font-size: 22px; 
+            font-size: 24px; 
             font-weight: 600;
             margin-top: 0;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
+            letter-spacing: 0.5px;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        /* Modern Floating Label Style */
+        input, textarea, select { 
+            width: 100%; 
+            padding: 12px 10px; 
+            border: none; 
+            border-bottom: 2px solid var(--border-color); 
+            border-radius: 0; 
+            box-sizing: border-box; 
+            font-family: 'Prompt', sans-serif;
+            font-size: 15px;
+            color: var(--text-main);
+            background-color: transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23546e7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
         }
 
         label { 
-            font-weight: 500; 
-            font-size: 14px; 
-            color: var(--text-main); 
-            margin-bottom: 8px; 
-            display: block; 
-        }
-
-        input, select, textarea { 
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 1.5px solid var(--border-color); 
-            border-radius: 10px; 
-            box-sizing: border-box; 
-            font-family: 'Prompt', sans-serif;
-            font-size: 14px;
-            color: var(--text-main);
-            background-color: #fff;
+            font-weight: 400; 
+            font-size: 15px; 
+            color: var(--text-sub); 
+            position: absolute;
+            left: 10px;
+            top: 12px;
             transition: all 0.3s ease;
+            pointer-events: none;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #90a4ae;
-        }
-
-        input:focus, select:focus, textarea:focus {
+        /* Maximize Orange Effect on Input focus */
+        input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(238, 88, 3, 0.15);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Floating label when focused or has content */
+        input:focus + label, 
+        input:not(:placeholder-shown) + label,
+        textarea:focus + label,
+        textarea:not(:placeholder-shown) + label,
+        select:focus + label,
+        select:valid + label {
+            top: -18px;
+            left: 0;
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        /* Modern Select Option styling for more orange */
+        select {
+            accent-color: var(--primary-color); /* Chrome/Edge/Firefox modern selection color */
         }
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 70px;
         }
 
         button { 
             width: 100%; 
-            padding: 14px; 
+            padding: 16px; 
             background-color: var(--primary-color); 
             color: white; 
             border: none; 
-            border-radius: 10px; 
-            font-size: 16px; 
+            border-radius: 50px; /* Modern Rounded Button */
+            font-size: 17px; 
             font-weight: 600; 
             font-family: 'Prompt', sans-serif;
-            margin-top: 15px; 
+            margin-top: 20px; 
             cursor: pointer; 
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(238, 88, 3, 0.25);
+            box-shadow: 0 6px 20px rgba(238, 88, 3, 0.3); /* Soft Orange Glow */
         }
 
         button:hover { 
             background-color: var(--primary-hover); 
+            box-shadow: 0 8px 25px rgba(238, 88, 3, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(238, 88, 3, 0.35);
         }
         
         button:active {
-            transform: translateY(0);
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(238, 88, 3, 0.3);
         }
     </style>
 </head>
@@ -116,57 +149,58 @@
     <form id="recruitmentForm">
         
         <div class="form-group">
-            <label>1. ชื่อตำแหน่ง และ ระดับ (Job Title & Level)</label>
-            <input type="text" id="job_title_and_level" placeholder="เช่น Senior Data Analyst" required>
+            <input type="text" id="job_title_and_level" placeholder=" " required>
+            <label>1. ชื่อตำแหน่ง และ ระดับ (เช่น Senior Data Analyst)</label>
         </div>
 
         <div class="form-group">
-            <label>2. รายละเอียดงานหลัก (Key Responsibilities)</label>
-            <textarea id="key_responsibilities" rows="3" placeholder="ระบุขอบเขตงานที่ต้องรับผิดชอบ" required></textarea>
+            <textarea id="key_responsibilities" rows="3" placeholder=" " required></textarea>
+            <label>2. รายละเอียดงานหลัก (ขอบเขตงานที่รับผิดชอบ)</label>
         </div>
 
         <div class="form-group">
-            <label>3. ทักษะที่จำเป็น (Required Skills)</label>
-            <textarea id="required_skills" rows="2" placeholder="เช่น Python, SQL, การสื่อสาร" required></textarea>
+            <textarea id="required_skills" rows="2" placeholder=" " required></textarea>
+            <label>3. ทักษะที่จำเป็น (เช่น Python, SQL, การสื่อสาร)</label>
         </div>
 
         <div class="form-group">
-            <label>4. ประสบการณ์ & ช่วงอายุ (Experience & Age Range)</label>
-            <input type="text" id="experience_and_age" placeholder="เช่น ประสบการณ์ 3 ปีขึ้นไป, อายุ 25-35 ปี" required>
+            <input type="text" id="experience_and_age" placeholder=" " required>
+            <label>4. ประสบการณ์ & ช่วงอายุ (เช่น ประสบการณ์ 3 ปี+, อายุ 25-35 ปี)</label>
         </div>
 
         <div class="form-group">
-            <label>5. วันที่คาดหวังให้เริ่มงาน (Expected Join Date)</label>
-            <input type="text" id="expected_join_date" placeholder="เช่น ด่วนที่สุด หรือ ภายในเดือนหน้า" required>
+            <input type="text" id="expected_join_date" placeholder=" " required>
+            <label>5. วันที่คาดหวังให้เริ่มงาน (เช่น ด่วนที่สุด หรือ ภายในเดือนหน้า)</label>
         </div>
 
         <div class="form-group">
-            <label>6. ประเภทการจ้างงาน (Employment Type)</label>
-            <select id="employment_type">
+            <select id="employment_type" required>
+                <option value="" disabled selected hidden></option>
                 <option value="พนักงานประจำ (Full-time)">พนักงานประจำ (Full-time)</option>
                 <option value="พนักงานสัญญาจ้าง (Contract)">พนักงานสัญญาจ้าง (Contract)</option>
                 <option value="นักศึกษาฝึกงาน (Intern)">นักศึกษาฝึกงาน (Intern)</option>
             </select>
+            <label>6. ประเภทการจ้างงาน</label>
         </div>
 
         <div class="form-group">
+            <textarea id="must_have_nice_to_have_skills" rows="2" placeholder=" " required></textarea>
             <label>7. ทักษะที่ต้องมี vs พิจารณาพิเศษ</label>
-            <textarea id="must_have_nice_to_have_skills" rows="2" placeholder="ระบุสิ่งที่ขาดไม่ได้ และสิ่งที่เป็นโบนัส" required></textarea>
         </div>
 
         <div class="form-group">
-            <label>8. รูปแบบการทำงาน & สถานที่</label>
-            <input type="text" id="work_arrangement_location" placeholder="เช่น เข้าออฟฟิศ 100% ที่ สนญ. นนทบุรี" required>
+            <input type="text" id="work_arrangement_location" placeholder=" " required>
+            <label>8. รูปแบบการทำงาน & สถานที่ (เช่น Hybrid สนญ. นนทบุรี)</label>
         </div>
 
         <div class="form-group">
-            <label>9. ช่วงเงินเดือน (Budget / Salary Range)</label>
-            <input type="text" id="salary_range" placeholder="ระบุช่วงงบประมาณที่อนุมัติ" required>
+            <input type="text" id="salary_range" placeholder=" " required>
+            <label>9. ช่วงเงินเดือน (งบประมาณที่อนุมัติ)</label>
         </div>
 
         <div class="form-group">
-            <label>10. แผนก / บริษัทในเครือ (Department / Cost Center)</label>
-            <input type="text" id="department" placeholder="เช่น แผนก HRIS / บริษัท JAS" required>
+            <input type="text" id="department" placeholder=" " required>
+            <label>10. แผนก / บริษัทในเครือ (เช่น HRIS / บริษัท JAS)</label>
         </div>
 
         <button type="button" onclick="submitForm()">ส่งข้อมูลให้ HR</button>
@@ -174,7 +208,7 @@
 </div>
 
 <script>
-    // === จุดที่ตั้งค่า URL เรียบร้อยแล้ว ===
+    // === จุดที่ตั้งค่า URL เรียบร้อยแล้ว (Preserved from terngtk's version) ===
     const myLiffId = "2010185869-3ExXv1pe"; 
     const n8nWebhookUrl = "https://aekkasart.app.n8n.cloud/webhook/hr-recruitment-liff"; 
 
